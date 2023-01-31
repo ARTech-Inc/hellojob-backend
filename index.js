@@ -3,6 +3,10 @@ const express = require("express");
 const app = express();
 const port = 5000;
 const router = require("./src/routes/index");
+const { urlencoded, json } = require("body-parser");
+
+app.use(urlencoded({ extended: true }));
+app.use(json());
 
 app.use("/api/v1", router);
 
