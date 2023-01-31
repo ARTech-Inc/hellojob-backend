@@ -1,0 +1,11 @@
+LOGIC USERS
+
+users get :
+- ketika tidak ada data users, maka '404 data users empty'
+- ketika sukses, tampilkan data users 200 get all data users success
+- ketika gagal, maka tampilkan pesan error 500
+
+users get detail :
+- jika ada request user tapi id tidak match, maka '404 users id not found'
+- jika berhasil maka tampilkan data user detail '200 get user id success'
+- jika error maka tampilkan pesan error '500'
