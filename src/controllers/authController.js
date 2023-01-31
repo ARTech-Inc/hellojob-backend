@@ -6,7 +6,8 @@ const e = require("express");
 
 const authController = {
   register: (req, res) => {
-    const { name, email, phone, password } = req.body;
+    const { name, email, phone, password, perusahaan, bidang_perusahaan } =
+      req.body;
     if (
       name == undefined ||
       email == undefined ||
@@ -45,6 +46,8 @@ const authController = {
                 name,
                 email,
                 phone,
+                perusahaan,
+                bidang_perusahaan,
                 password: hash,
               };
               return authModel

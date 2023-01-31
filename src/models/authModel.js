@@ -3,16 +3,30 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 
 const authModel = {
-  register: ({ name, email, phone, password }) => {
+  register: ({
+    name,
+    email,
+    phone,
+    password,
+    perusahaan,
+    bidang_perusahaan,
+  }) => {
     return new Promise((resolve, reject) => {
       db.query(
-        `INSERT INTO users (id, name, email, phone, password) VALUES ($1, $2, $3, $4, $5)`,
-        [uuidv4(), name, email, phone, password],
+        `INSERT INTO users (id, name, email, phone, perusahaan, bidang_perusahaan, password) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [uuidv4(), name, email, phone, perusahaan, bidang_perusahaan, password],
         (error, result) => {
           if (error) {
             return reject(error.message);
           } else {
-            return resolve({ name, email, phone });
+            return resolve({
+              name,
+              email,
+              phone,
+              //   password,
+              perusahaan,
+              bidang_perusahaan,
+            });
           }
         }
       );

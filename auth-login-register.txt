@@ -1,3 +1,4 @@
+pekerja :
 adriel@gmail.com
 adrieladriel123
 
@@ -9,3 +10,10 @@ ramarama123
 
 rheza@gmail.com
 rhezarheza123
+
+perekrut :
+tokopedia@gmail.com
+tokopedia123
+
+sofiaa@gmail.com
+sofiasofia123

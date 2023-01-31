@@ -1,11 +1,28 @@
 LOGIC USERS
 
-users get :
+users get (Rheza) :
 - ketika tidak ada data users, maka '404 data users empty'
 - ketika sukses, tampilkan data users 200 get all data users success
 - ketika gagal, maka tampilkan pesan error 500
 
-users get detail :
+users get detail (Rheza) :
 - jika ada request user tapi id tidak match, maka '404 users id not found'
 - jika berhasil maka tampilkan data user detail '200 get user id success'
 - jika error maka tampilkan pesan error '500'
+
+users patch (Rheza):
+- jika ada field yang tidak terisi, maka value field akan seperti sebelumnya
+
+==========================
+LOGIC AUTH
+
+register (Rheza) :
+- jika ada kesalahan server/database maka '500 something went wrong'
+- jika field tidak terisi, maka '400 field (..) tidak boleh kosong
+- jika email tdk menggunakan format gmail, maka '400 harus format gmail'
+- jika password tidak lebih dari 8, maka '400 harus lebih dari 8'
+- jika benar semua, maka hashing password pakai bcrypt
+- jika hashing sukses, maka register success
+- jika gagal, maka message : error
+
+login (Rama):
