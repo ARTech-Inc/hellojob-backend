@@ -4,6 +4,11 @@ users get (Rheza) :
 - ketika tidak ada data users, maka '404 data users empty'
 - ketika sukses, tampilkan data users 200 get all data users success
 - ketika gagal, maka tampilkan pesan error 500
+- ketika search nama, maka akan tampil data sesuai nama user (pekerja)
+- ketika search kategori (seperti job_desk), maka akan tampil data sesuai kategori yang dicari
+- ketika sort by category (misal job_status fulltime), maka akan tampil sesuai data yang dicari
+- setiap page home menampilkan maks 4 data user
+- query pagination sudah aktif, tinggal pengembangan untuk PENJUMLAHAN TOTAL PAGE
 
 users get detail (Rheza) :
 - jika ada request user tapi id tidak match, maka '404 users id not found'

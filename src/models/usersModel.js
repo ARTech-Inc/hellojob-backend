@@ -3,15 +3,21 @@ const { v4: uuidv4 } = require("uuid");
 const e = require("express");
 
 const usersModel = {
-  get: () => {
+  get: (queryParams) => {
+    const { search = "", category = "", limit = 4, page = 1 } = queryParams;
     return new Promise((resolve, reject) => {
-      db.query(`SELECT * FROM users`, (error, result) => {
-        if (error) {
-          return reject(error.message);
-        } else {
-          return resolve(result.rows);
+      db.query(
+        `SELECT * FROM users WHERE name ILIKE '%${search}%' AND job_status ILIKE '%${category}%' LIMIT ${limit} OFFSET ${
+          (page - 1) * limit
+        }`,
+        (error, result) => {
+          if (error) {
+            return reject(error.message);
+          } else {
+            return resolve(result.rows);
+          }
         }
-      });
+      );
     });
   },
   getDetail: (id) => {

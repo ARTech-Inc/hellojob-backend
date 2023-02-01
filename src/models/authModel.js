@@ -8,13 +8,25 @@ const authModel = {
     email,
     phone,
     password,
-    perusahaan,
-    bidang_perusahaan,
+    perusahaan = "",
+    bidang_perusahaan = "",
+    job_desk = "",
+    job_status = "",
   }) => {
     return new Promise((resolve, reject) => {
       db.query(
-        `INSERT INTO users (id, name, email, phone, perusahaan, bidang_perusahaan, password) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-        [uuidv4(), name, email, phone, perusahaan, bidang_perusahaan, password],
+        `INSERT INTO users (id, name, email, phone, perusahaan, bidang_perusahaan, password, job_desk, job_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [
+          uuidv4(),
+          name,
+          email,
+          phone,
+          perusahaan,
+          bidang_perusahaan,
+          password,
+          job_desk,
+          job_status,
+        ],
         (error, result) => {
           if (error) {
             return reject(error.message);
@@ -26,6 +38,8 @@ const authModel = {
               //   password,
               perusahaan,
               bidang_perusahaan,
+              // job_desk,
+              // job_status,
             });
           }
         }
