@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express();
-const verifyToken = require('../../helper/verifyToken')
+const verifyToken = require('../helpers/verifyToken')
 
 const usersController = require("../controllers/usersController");
 

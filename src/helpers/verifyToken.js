@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const {JWT_PRIVATE_KEY} = process.env
+
 const verifyToken = (req,res,next)=>{
   const token = req.header('token')
   if(!req.header('token')){
@@ -11,9 +12,9 @@ const verifyToken = (req,res,next)=>{
     jwt.verify(token,JWT_PRIVATE_KEY,(err,decoded)=>{
       if(!err){
         //author
-        if(decoded.role === "admin"){
+        if(decoded.role === "pekerja"){
           next()
-        }else if(decoded.role === "user"){
+        }else if(decoded.role === "perekrut"){
           return res.status(403).send({
             message: 'kamu tidak memiliki akses'
           })
