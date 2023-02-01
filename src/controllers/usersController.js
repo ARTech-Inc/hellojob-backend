@@ -3,7 +3,7 @@ const usersModel = require("../models/usersModel");
 const usersController = {
   get: (req, res) => {
     return usersModel
-      .get()
+      .get(req.query)
       .then((result) => {
         if (result.rows == 0) {
           return res.status(404).send({ message: "Data users empty!" });
