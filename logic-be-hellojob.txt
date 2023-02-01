@@ -31,3 +31,5 @@ register (Rheza) :
 - jika gagal, maka message : error
 
 login (Rama):
+- jika email atau password kosong, maka '400 wrong email/password'
+- jika benar, maka user akan mendapatkan token
