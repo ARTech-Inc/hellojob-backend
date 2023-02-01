@@ -1,10 +1,28 @@
 const authModel = require("../models/authModel");
 const bcrypt = require("bcrypt");
 const e = require("express");
-// const jwt
-// const {JWT_PRIVATE_KEY}
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
+const {JWT_PRIVATE_KEY} = process.env
 
 const authController = {
+  login:(req,res)=>{
+    return authModel.login(req.body)
+    .then((result)=>{
+      jwt.sign({
+        id:result.id,
+        role:result.role
+      }),JWT_PRIVATE_KEY,{expireIn:"1d"},(err,token)=>{
+        return res.status(200).send({message:'succes', data :{
+          token,
+          user: result
+        }})
+      }
+    })
+    .catch((err)=>{
+      return res.status(400).send({message:err})
+    })
+  },
   register: (req, res) => {
     const { name, email, phone, password, perusahaan, bidang_perusahaan } =
       req.body;

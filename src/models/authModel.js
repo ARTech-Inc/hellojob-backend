@@ -3,6 +3,32 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 
 const authModel = {
+  login:({email,password})=>{
+    console.log(email,password)
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT * FROM users WHERE email=$1`,[email],(err,result)=>{
+        if(err){
+          return reject(err,message)
+        }else{
+          if(result.rows.length===0){
+            return reject('email or password is wrong!!')
+          }else{
+            bcrypt.compare(password, result.rows[0].password,(err,hashingResult)=>{
+              console.log(result)
+              if(err){
+                return reject('email or password is wrong')
+              }
+              if(!hashingResult){
+                return reject('email or password is wrong')
+              }else{
+                return resolve(result.rows[0])
+              }
+            })
+          }
+        }
+      })
+    })
+  },
   register: ({
     name,
     email,
