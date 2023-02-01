@@ -1,31 +1,36 @@
 const authModel = require("../models/authModel");
 const bcrypt = require("bcrypt");
 const e = require("express");
-const jwt = require('jsonwebtoken')
-require('dotenv').config()
-const {JWT_PRIVATE_KEY} = process.env
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const { JWT_PRIVATE_KEY } = process.env;
 
 const authController = {
-  login:(req,res)=>{
-    //console.log(req.body)
-    return authModel.login(req.body)
-    .then((result)=>{
-      console.log(result)
-      console.log(JWT_PRIVATE_KEY)
-      jwt.sign({
-        id:result.id,
-        role:result.role
-      },JWT_PRIVATE_KEY,{expiresIn:"2 days"},(err,tokenResult)=>{
-        return res.status(200).send({message:'succes', data :{
-          token: tokenResult,
-          user: {id : result.id,email : result.email,role : result.role
+  login: (req, res) => {
+    return authModel
+      .login(req.body)
+      .then((result) => {
+        jwt.sign(
+          {
+            id: result.id,
+            role: result.role,
+          },
+          JWT_PRIVATE_KEY,
+          { expiresIn: "2 days" },
+          (err, tokenResult) => {
+            return res.status(200).send({
+              message: "succes",
+              data: {
+                token: tokenResult,
+                user: { id: result.id, email: result.email, role: result.role },
+              },
+            });
           }
-        }})
+        );
       })
-    })
-    .catch((err)=>{
-      return res.status(400).send({message:err})
-    })
+      .catch((err) => {
+        return res.status(400).send({ message: err });
+      });
   },
   register: (req, res) => {
     const {
