@@ -4,7 +4,7 @@ const e = require("express");
 
 const usersModel = {
   get: (queryParams) => {
-    const { search = "", category = "", limit = 4, page = 1 } = queryParams;
+    const { search = "", category = "", limit = 100, page = 1 } = queryParams;
     return new Promise((resolve, reject) => {
       db.query(
         `SELECT * FROM users WHERE name ILIKE '%${search}%' AND job_status ILIKE '%${category}%' LIMIT ${limit} OFFSET ${
@@ -18,15 +18,30 @@ const usersModel = {
           }
         }
       );
-      // COMMENT CODING DI BAWAH INI JANGAN DIHAPUS DULU!!!
       // db.query(
+      //   // COMPARE
+      //   // `SELECT
+      //   //   usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role,
+      //   //   json_agg(row_to_json(usrexp)) work_experiences
+      //   //   FROM users AS usr
+      //   //   INNER JOIN (SELECT experience_id, nama_perusahaan, posisi, tanggal_masuk, tanggal_keluar, deskripsi FROM user_experiences) AS usrexp
+      //   //   ON usr.id = usrexp.user_id
+      //   //   GROUP BY usr.id
+      //   //   `,
       //   `SELECT
-      //     usr.id, usr.name, usr.email,
-      //     json_agg(row_to_json(usrexp)) experiences
-      //     FROM users AS usr
-      //     INNER JOIN (SELECT experience_id, nama_perusahaan, posisi, tanggal_masuk, tanggal_keluar, deskripsi FROM user_experiences) AS usrexp
-      //     ON usr.id = usrexp.user_id
-      //     GROUP BY usr.id`
+      //   usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role,
+      //   json_agg(row_to_json(usrexp)) work_experiences
+      //   FROM users AS usr
+      //   INNER JOIN user_experiences AS usrexp
+      //   ON usr.id = usrexp.user_id
+      //   GROUP BY usr.id`,
+      //   (error, result) => {
+      //     if (error) {
+      //       return reject(error.message);
+      //     } else {
+      //       return resolve(result.rows);
+      //     }
+      //   }
       // );
     });
   },

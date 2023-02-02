@@ -9,6 +9,8 @@ users get (Rheza) :
 - ketika sort by category (misal job_status fulltime), maka akan tampil sesuai data yang dicari
 - setiap page home menampilkan maks 4 data user
 - query pagination sudah aktif, tinggal pengembangan untuk PENJUMLAHAN TOTAL PAGE
+- ketika get data, maka akan muncul yang hanya ada pengalaman kerja saja. Jika belum ada, maka tidak muncul.
+
 
 users get detail (Rheza) :
 - jika ada request user tapi id tidak match, maka '404 users id not found'
