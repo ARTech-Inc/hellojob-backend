@@ -60,7 +60,6 @@ const usersController = {
       ...req.body,
       id: req.params.id,
     };
-    console.log(request.nama_perusahaan.length);
     if (request.nama_perusahaan.length == 0) {
       return res
         .status(400)
