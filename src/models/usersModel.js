@@ -1,10 +1,15 @@
 const db = require("../helpers/db");
 const { v4: uuidv4 } = require("uuid");
-const e = require("express");
 
 const usersModel = {
   get: (queryParams) => {
-    const { search = "", category = "", limit = 100, page = 1 } = queryParams;
+    const {
+      search = "",
+      catJobStatus = "",
+      catSkill = "",
+      limit = 10,
+      page = 1,
+    } = queryParams;
     return new Promise((resolve, reject) => {
       // db.query(
       //   `SELECT * FROM users WHERE name ILIKE '%${search}%' AND job_status ILIKE '%${category}%' LIMIT ${limit} OFFSET ${
@@ -32,9 +37,11 @@ const usersModel = {
         usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role,
         json_agg(row_to_json(usrexp)) work_experiences
         FROM users AS usr
-        INNER JOIN user_experiences AS usrexp
+        LEFT JOIN user_experiences AS usrexp
         ON usr.id = usrexp.user_id
-        GROUP BY usr.id`,
+        ${search ? `WHERE name ILIKE '%${search}%'` : ""}
+        ${catJobStatus ? `WHERE job_status ILIKE '%${catJobStatus}%'` : ""}
+        GROUP BY usr.id LIMIT ${limit} OFFSET ${(page - 1) * limit}`,
         (error, result) => {
           if (error) {
             return reject(error.message);
@@ -145,6 +152,33 @@ const usersModel = {
                   tanggal_masuk,
                   tanggal_keluar,
                   deskripsi,
+                });
+              }
+            }
+          );
+        }
+      });
+    });
+  },
+
+  addSkill: ({ id, user_id, skill_name }) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
+        if (error) {
+          return reject(error.message);
+        } else {
+          console.log(skill_name);
+          db.query(
+            `INSERT INTO user_skills (skill_id, user_id, skill_name) VALUES ('${uuidv4()}', '${
+              result.rows[0].id
+            }' , '${skill_name}')`,
+            (error, result) => {
+              if (error) {
+                return reject(error.message);
+              } else {
+                return resolve({
+                  user_id,
+                  skill_name,
                 });
               }
             }

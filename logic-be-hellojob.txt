@@ -7,10 +7,10 @@ users get (Rheza) :
 - ketika search nama, maka akan tampil data sesuai nama user (pekerja)
 - ketika search kategori (seperti job_desk), maka akan tampil data sesuai kategori yang dicari
 - ketika sort by category (misal job_status fulltime), maka akan tampil sesuai data yang dicari
-- setiap page home menampilkan maks 4 data user
+- setiap page home menampilkan maks 10 data user
 - query pagination sudah aktif, tinggal pengembangan untuk PENJUMLAHAN TOTAL PAGE
-- ketika get data, maka akan muncul yang hanya ada pengalaman kerja saja. Jika belum ada, maka tidak muncul.
-
+- ketika search berdasarkan nama, maka akan muncul sesuai namanya
+- ketika sort by category, maka akan muncul sesuai categorynya (contoh: fulltime / freealance)
 
 users get detail (Rheza) :
 - jika ada request user tapi id tidak match, maka '404 users id not found'
@@ -22,6 +22,10 @@ users patch (Rheza):
 
 users add work experience (Rheza) :
 - jika user mau menambahkan pengalaman kerjanya, maka akan otomatis masuk ke tabel user_experience
+- jika user pekerja tidak mengisi salah satu atau lebih field inputan, maka akan muncul error dan data tidak akan masuk ke database
+
+users add skill (Rheza) :
+- jika user mau menambahkan skillnya, maka akan otomatis masuk ke tabel user_skills
 - jika user pekerja tidak mengisi salah satu atau lebih field inputan, maka akan muncul error dan data tidak akan masuk ke database
 
 ==========================

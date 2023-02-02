@@ -39,7 +39,7 @@ const usersController = {
   },
 
   add: (req, res) => {
-    console.log(req.file)
+    console.log(req.file);
     const request = {
       ...req.body,
     };
@@ -101,6 +101,32 @@ const usersController = {
         return res.status(500).send({ message: err });
       });
   },
+
+  addSkill: (req, res) => {
+    const request = {
+      ...req.body,
+      id: req.params.id,
+    };
+    if (request.skill_name.length == 0) {
+      return res.status(400).send({ message: "Skill field should be filled!" });
+    }
+    return usersModel
+      .addSkill(request)
+      .then((result) => {
+        if (result == undefined) {
+          return res
+            .status(404)
+            .send({ data: result, message: `Users was not found!` });
+        }
+        return res
+          .status(200)
+          .send({ data: result, message: `Add skill success!` });
+      })
+      .catch((err) => {
+        return res.status(500).send({ message: err });
+      });
+  },
+
   update: (req, res) => {
     const request = {
       ...req.body,
