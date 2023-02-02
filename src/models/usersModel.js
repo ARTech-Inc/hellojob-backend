@@ -18,6 +18,16 @@ const usersModel = {
           }
         }
       );
+      // COMMENT CODING DI BAWAH INI JANGAN DIHAPUS DULU!!!
+      // db.query(
+      //   `SELECT
+      //     usr.id, usr.name, usr.email,
+      //     json_agg(row_to_json(usrexp)) experiences
+      //     FROM users AS usr
+      //     INNER JOIN (SELECT experience_id, nama_perusahaan, posisi, tanggal_masuk, tanggal_keluar, deskripsi FROM user_experiences) AS usrexp
+      //     ON usr.id = usrexp.user_id
+      //     GROUP BY usr.id`
+      // );
     });
   },
   getDetail: (id) => {
@@ -88,6 +98,44 @@ const usersModel = {
           }
         }
       );
+    });
+  },
+
+  addExpr: ({
+    id,
+    user_id,
+    nama_perusahaan,
+    posisi,
+    tanggal_masuk,
+    tanggal_keluar,
+    deskripsi,
+  }) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
+        if (error) {
+          return reject(error.message);
+        } else {
+          db.query(
+            `INSERT INTO user_experiences (experience_id, user_id, nama_perusahaan, posisi, tanggal_masuk, tanggal_keluar, deskripsi) VALUES ('${uuidv4()}', '${
+              result.rows[0].id
+            }' ,'${nama_perusahaan}', '${posisi}','${tanggal_masuk}', '${tanggal_keluar}', '${deskripsi}')`,
+            (error, result) => {
+              if (error) {
+                return reject(error.message);
+              } else {
+                return resolve({
+                  user_id,
+                  nama_perusahaan,
+                  posisi,
+                  tanggal_masuk,
+                  tanggal_keluar,
+                  deskripsi,
+                });
+              }
+            }
+          );
+        }
+      });
     });
   },
 

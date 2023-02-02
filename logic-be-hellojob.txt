@@ -18,6 +18,10 @@ users get detail (Rheza) :
 users patch (Rheza):
 - jika ada field yang tidak terisi, maka value field akan seperti sebelumnya
 
+users add work experience (Rheza) :
+- jika user mau menambahkan pengalaman kerjanya, maka akan otomatis masuk ke tabel user_experience
+- jika user pekerja tidak mengisi salah satu atau lebih field inputan, maka akan muncul error dan data tidak akan masuk ke database
+
 ==========================
 LOGIC AUTH
 

@@ -5,8 +5,10 @@ const usersController = {
     return usersModel
       .get(req.query)
       .then((result) => {
-        if (result.rows == 0) {
-          return res.status(404).send({ message: "Data users empty!" });
+        if (result.length == 0) {
+          return res
+            .status(404)
+            .send({ data: result, message: "Data users empty!" });
         } else {
           return res
             .status(200)
@@ -25,7 +27,7 @@ const usersController = {
         if (result == undefined) {
           return res
             .status(404)
-            .send({ message: `Users ${id} was not found!` });
+            .send({ data: result, message: `Users ${id} was not found!` });
         }
         return res
           .status(200)
@@ -35,6 +37,7 @@ const usersController = {
         return res.status(500).send({ message: err });
       });
   },
+
   add: (req, res) => {
     const request = {
       ...req.body,
@@ -45,6 +48,54 @@ const usersController = {
         return res
           .status(201)
           .send({ data: result, message: "Add data user success!" });
+      })
+      .catch((err) => {
+        return res.status(500).send({ message: err });
+      });
+  },
+
+  addExpr: (req, res) => {
+    const request = {
+      ...req.body,
+      id: req.params.id,
+    };
+    console.log(request.nama_perusahaan.length);
+    if (request.nama_perusahaan.length == 0) {
+      return res
+        .status(400)
+        .send({ message: "Company name field should be filled!" });
+    }
+    if (request.posisi.length == 0) {
+      return res
+        .status(400)
+        .send({ message: "Position field should be filled!" });
+    }
+    if (request.tanggal_masuk.length == 0) {
+      return res
+        .status(400)
+        .send({ message: "Entry date field should be filled!" });
+    }
+    if (request.tanggal_keluar.length == 0) {
+      return res
+        .status(400)
+        .send({ message: "Out date field should be filled!" });
+    }
+    if (request.deskripsi.length == 0) {
+      return res
+        .status(400)
+        .send({ message: "Description field should be filled!" });
+    }
+    return usersModel
+      .addExpr(request)
+      .then((result) => {
+        if (result == undefined) {
+          return res
+            .status(404)
+            .send({ data: result, message: `Users was not found!` });
+        }
+        return res
+          .status(200)
+          .send({ data: result, message: `Add pengalaman kerja success!` });
       })
       .catch((err) => {
         return res.status(500).send({ message: err });
