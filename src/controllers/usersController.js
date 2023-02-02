@@ -39,6 +39,7 @@ const usersController = {
   },
 
   add: (req, res) => {
+    console.log(req.file)
     const request = {
       ...req.body,
     };

@@ -40,6 +40,7 @@ const authModel = {
     bidang_perusahaan = "",
     job_desk = "",
     job_status = "",
+    
   }) => {
     return new Promise((resolve, reject) => {
       db.query(
