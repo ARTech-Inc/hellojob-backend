@@ -79,6 +79,7 @@ const usersModel = {
       );
     });
   },
+
   add: ({
     id,
     name,
