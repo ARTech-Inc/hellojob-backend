@@ -37,7 +37,7 @@ const usersModel = {
         usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role,
         json_agg(row_to_json(usrexp)) work_experiences,
         json_agg(row_to_json(usrskill)) skills,
-		    json_agg(row_to_json(usrportf)) portfolios
+        json_agg(row_to_json(usrportf)) portfolios
         FROM users AS usr
         LEFT JOIN user_experiences AS usrexp
         ON usr.id = usrexp.user_id
@@ -47,6 +47,7 @@ const usersModel = {
         ON usr.id = usrportf.user_id
         ${search ? `WHERE name ILIKE '%${search}%'` : ""}
         ${catJobStatus ? `WHERE job_status ILIKE '%${catJobStatus}%'` : ""}
+        ${catSkill ? `WHERE skill_name ILIKE '%${catSkill}%'` : ""}
         GROUP BY usr.id LIMIT ${limit} OFFSET ${(page - 1) * limit}`,
         (error, result) => {
           if (error) {
@@ -65,8 +66,7 @@ const usersModel = {
         SELECT
         usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role,
         json_agg(row_to_json(usrexp)) work_experiences,
-        json_agg(row_to_json(usrskill)) skills,
-		    json_agg(row_to_json(usrportf)) portfolios
+        json_agg(row_to_json(usrskill)) skills
         FROM users AS usr
         LEFT JOIN user_experiences AS usrexp
         ON usr.id = usrexp.user_id
@@ -192,7 +192,6 @@ const usersModel = {
         if (error) {
           return reject(error.message);
         } else {
-          console.log(skill_name);
           db.query(
             `INSERT INTO user_skills (skill_id, user_id, skill_name) VALUES ('${uuidv4()}', '${
               result.rows[0].id
@@ -208,6 +207,40 @@ const usersModel = {
               }
             }
           );
+        }
+      });
+    });
+  },
+
+  addPortf: ({ id, app_name, link_repo, file }) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
+        if (error) {
+          return reject(error.message);
+        } else {
+          for (let i = 0; i < file.length; i++) {
+            db.query(
+              `INSERT INTO user_portfolios (portfolio_id, user_id, filename, app_name, link_repo) VALUES ('${uuidv4()}', '${
+                result.rows[0].id
+              }', '${file[i].filename}', '${app_name}', '${link_repo}')`,
+              (err, reslt) => {
+                if (err) {
+                  return reject(err.message);
+                } else {
+                  // kedepannya query di bawah ini untuk portfolio images
+                  // db.query(
+                  //   `INSERT INTO portfolio_images (portfolio_id, user_id, filename, alt_name) VALUES (, result.rows[0].id)`
+                  // )
+                  return resolve({
+                    user_id: id,
+                    portfolio_images: file,
+                    app_name,
+                    link_repo,
+                  });
+                }
+              }
+            );
+          }
         }
       });
     });
