@@ -36,12 +36,15 @@ const usersModel = {
         `SELECT
         usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role,
         json_agg(row_to_json(usrexp)) work_experiences,
-        json_agg(row_to_json(usrskill)) skills
+        json_agg(row_to_json(usrskill)) skills,
+		    json_agg(row_to_json(usrportf)) portfolios
         FROM users AS usr
         LEFT JOIN user_experiences AS usrexp
         ON usr.id = usrexp.user_id
         LEFT JOIN user_skills AS usrskill
         ON usr.id = usrskill.user_id
+        LEFT JOIN user_portfolios AS usrportf
+        ON usr.id = usrportf.user_id
         ${search ? `WHERE name ILIKE '%${search}%'` : ""}
         ${catJobStatus ? `WHERE job_status ILIKE '%${catJobStatus}%'` : ""}
         GROUP BY usr.id LIMIT ${limit} OFFSET ${(page - 1) * limit}`,
@@ -58,17 +61,22 @@ const usersModel = {
   getDetail: (id) => {
     return new Promise((resolve, reject) => {
       db.query(
-        `SELECT
+        `
+        SELECT
         usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role,
         json_agg(row_to_json(usrexp)) work_experiences,
-        json_agg(row_to_json(usrskill)) skills
+        json_agg(row_to_json(usrskill)) skills,
+		    json_agg(row_to_json(usrportf)) portfolios
         FROM users AS usr
         LEFT JOIN user_experiences AS usrexp
         ON usr.id = usrexp.user_id
         LEFT JOIN user_skills AS usrskill
         ON usr.id = usrskill.user_id
+        LEFT JOIN user_portfolios AS usrportf
+        ON usr.id = usrportf.user_id
         WHERE usr.id = '${id}'
-        GROUP BY usr.id`,
+        GROUP BY usr.id
+        `,
         (error, result) => {
           if (error) {
             return reject(error.message);
