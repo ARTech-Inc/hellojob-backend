@@ -39,7 +39,6 @@ const usersController = {
   },
 
   add: (req, res) => {
-    console.log(req.file);
     const request = {
       ...req.body,
     };
@@ -121,6 +120,47 @@ const usersController = {
         return res
           .status(200)
           .send({ data: result, message: `Add skill success!` });
+      })
+      .catch((err) => {
+        return res.status(500).send({ message: err });
+      });
+  },
+
+  addPortf: (req, res) => {
+    const request = {
+      ...req.body,
+      file: req.files,
+      id: req.params.id,
+    };
+    if (request.app_name.length == 0) {
+      return res
+        .status(400)
+        .send({ message: `App name field should be filled!` });
+    }
+    if (request.link_repo.length == 0) {
+      return res
+        .status(400)
+        .send({ message: `Link repo field should be filled!` });
+    }
+    if (request.file.length == 0) {
+      return res.status(400).send({ message: `Image must be sent!` });
+    }
+    if (request.file.length > 1) {
+      return res
+        .status(400)
+        .send({ message: `Sorry, for now can upload one image only!` });
+    }
+    return usersModel
+      .addPortf(request)
+      .then((result) => {
+        if (result == undefined) {
+          return res
+            .status(404)
+            .send({ data: result, message: `Users was not found!` });
+        }
+        return res
+          .status(201)
+          .send({ data: result, message: `Add portfolio success!` });
       })
       .catch((err) => {
         return res.status(500).send({ message: err });
