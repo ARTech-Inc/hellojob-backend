@@ -93,7 +93,7 @@ const usersController = {
             .send({ data: result, message: `Users was not found!` });
         }
         return res
-          .status(200)
+          .status(201)
           .send({ data: result, message: `Add pengalaman kerja success!` });
       })
       .catch((err) => {
@@ -118,7 +118,7 @@ const usersController = {
             .send({ data: result, message: `Users was not found!` });
         }
         return res
-          .status(200)
+          .status(201)
           .send({ data: result, message: `Add skill success!` });
       })
       .catch((err) => {

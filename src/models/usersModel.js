@@ -34,7 +34,7 @@ const usersModel = {
         //   GROUP BY usr.id
         //   `,
         `SELECT
-        usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role,
+        usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role, usr.avatar,
         json_agg(row_to_json(usrexp)) work_experiences,
         json_agg(row_to_json(usrskill)) skills,
         json_agg(row_to_json(usrportf)) portfolios
@@ -64,9 +64,10 @@ const usersModel = {
       db.query(
         `
         SELECT
-        usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role,
+        usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role, usr.avatar,
         json_agg(row_to_json(usrexp)) work_experiences,
-        json_agg(row_to_json(usrskill)) skills
+        json_agg(row_to_json(usrskill)) skills,
+        json_agg(row_to_json(usrportf)) portfolios
         FROM users AS usr
         LEFT JOIN user_experiences AS usrexp
         ON usr.id = usrexp.user_id

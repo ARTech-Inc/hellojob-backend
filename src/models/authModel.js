@@ -40,10 +40,12 @@ const authModel = {
     bidang_perusahaan = "",
     job_desk = "",
     job_status = "",
+    // avatar = "",
+    file,
   }) => {
     return new Promise((resolve, reject) => {
       db.query(
-        `INSERT INTO users (id, name, email, phone, perusahaan, bidang_perusahaan, password, job_desk, job_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        `INSERT INTO users (id, name, email, phone, perusahaan, bidang_perusahaan, password, job_desk, job_status, avatar) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
         [
           uuidv4(),
           name,
@@ -54,6 +56,8 @@ const authModel = {
           password,
           job_desk,
           job_status,
+          // avatar,
+          file,
         ],
         (error, result) => {
           if (error) {
@@ -68,12 +72,77 @@ const authModel = {
               bidang_perusahaan,
               // job_desk,
               // job_status,
+              // avatar,
+              file,
             });
           }
         }
       );
     });
   },
+  // REGISTER OTOMATIS INCLUDE AVATAR UNTUK NANTI DIUPDATE SAAT EDIT PROFILE (BELUM FIX)
+  // register: ({
+  //   id,
+  //   name,
+  //   email,
+  //   phone,
+  //   password,
+  //   perusahaan = "",
+  //   bidang_perusahaan = "",
+  //   job_desk = "",
+  //   job_status = "",
+  //   // file,
+  //   file = "",
+  // }) => {
+  //   return new Promise((resolve, reject) => {
+  //     db.query(
+  //       `INSERT INTO users (id, name, email, phone, perusahaan, bidang_perusahaan, password, job_desk, job_status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+  //       [
+  //         uuidv4(),
+  //         name,
+  //         email,
+  //         phone,
+  //         perusahaan,
+  //         bidang_perusahaan,
+  //         password,
+  //         job_desk,
+  //         job_status,
+  //       ],
+  //       (error, result) => {
+  //         if (error) {
+  //           return reject(error.message);
+  //         } else {
+  //           // if array / multiple
+  //           // for (let i = 0; i < file.length; i++) {
+  //           //   db.query(
+  //           //     `INSERT INTO user_avatars (avatar_id, user_id, filename, name) VALUES ('${uuidv4()}', '${
+  //           //       result.rows[0].id
+  //           //     }' '${file[i].filename}', '${name}')`
+  //           //   );
+  //           // }
+  //           // if single
+  //           db.query(
+  //             `INSERT INTO user_avatars (avatar_id, user_id, filename, name) VALUES ('${uuidv4()}', '${
+  //               result.rows[0].id
+  //             }' '${file}', '${name}')`
+  //           );
+  //           return resolve({
+  //             id,
+  //             name,
+  //             email,
+  //             phone,
+  //             //   password,
+  //             perusahaan,
+  //             bidang_perusahaan,
+  //             user_avatar: file,
+  //             // job_desk,
+  //             // job_status,
+  //           });
+  //         }
+  //       }
+  //     );
+  //   });
+  // },
 };
 
 module.exports = authModel;
