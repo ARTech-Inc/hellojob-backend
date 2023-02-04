@@ -106,6 +106,8 @@ const usersController = {
       ...req.body,
       id: req.params.id,
     };
+    // console.log(request);
+    // if(request)
     if (request.skill_name.length == 0) {
       return res.status(400).send({ message: "Skill field should be filled!" });
     }
@@ -129,7 +131,7 @@ const usersController = {
   addPortf: (req, res) => {
     const request = {
       ...req.body,
-      file: req.files,
+      file: req.file,
       id: req.params.id,
     };
     if (request.app_name.length == 0) {
@@ -142,6 +144,10 @@ const usersController = {
         .status(400)
         .send({ message: `Link repo field should be filled!` });
     }
+    console.log(request.file);
+    if (request.file == undefined) {
+      return res.status(400).send({ message: `Image must be sent!` });
+    }
     if (request.file.length == 0) {
       return res.status(400).send({ message: `Image must be sent!` });
     }
@@ -150,9 +156,11 @@ const usersController = {
         .status(400)
         .send({ message: `Sorry, for now can upload one image only!` });
     }
+    // console.log(request);
     return usersModel
       .addPortf(request)
       .then((result) => {
+        // console.log(result);
         if (result == undefined) {
           return res
             .status(404)

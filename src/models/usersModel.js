@@ -7,7 +7,7 @@ const usersModel = {
       search = "",
       catJobStatus = "",
       catSkill = "",
-      limit = 10,
+      limit = 4,
       page = 1,
     } = queryParams;
     return new Promise((resolve, reject) => {
@@ -171,6 +171,7 @@ const usersModel = {
               if (error) {
                 return reject(error.message);
               } else {
+                console.log(nama_perusahaan);
                 return resolve({
                   user_id,
                   nama_perusahaan,
@@ -219,29 +220,29 @@ const usersModel = {
         if (error) {
           return reject(error.message);
         } else {
-          for (let i = 0; i < file.length; i++) {
-            db.query(
-              `INSERT INTO user_portfolios (portfolio_id, user_id, filename, app_name, link_repo) VALUES ('${uuidv4()}', '${
-                result.rows[0].id
-              }', '${file[i].filename}', '${app_name}', '${link_repo}')`,
-              (err, reslt) => {
-                if (err) {
-                  return reject(err.message);
-                } else {
-                  // kedepannya query di bawah ini untuk portfolio images
-                  // db.query(
-                  //   `INSERT INTO portfolio_images (portfolio_id, user_id, filename, alt_name) VALUES (, result.rows[0].id)`
-                  // )
-                  return resolve({
-                    user_id: id,
-                    portfolio_images: file,
-                    app_name,
-                    link_repo,
-                  });
-                }
+          // for (let i = 0; i < file.length; i++) {
+          db.query(
+            `INSERT INTO user_portfolios (portfolio_id, user_id, filename, app_name, link_repo) VALUES ('${uuidv4()}', '${
+              result.rows[0].id
+            }', '${file.filename}', '${app_name}', '${link_repo}')`,
+            (err, reslt) => {
+              if (err) {
+                return reject(err.message);
+              } else {
+                // kedepannya query di bawah ini untuk portfolio images
+                // db.query(
+                //   `INSERT INTO portfolio_images (portfolio_id, user_id, filename, alt_name) VALUES (, result.rows[0].id)`
+                // )
+                return resolve({
+                  user_id: id,
+                  portfolio_images: file,
+                  app_name,
+                  link_repo,
+                });
               }
-            );
-          }
+            }
+          );
+          // }
         }
       });
     });
