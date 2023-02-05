@@ -33,6 +33,8 @@ const usersModel = {
         //   ON usr.id = usrexp.user_id
         //   GROUP BY usr.id
         //   `,
+        // LEFT JOIN user_skills AS usrskill
+
         `SELECT
         usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role, usr.avatar,
         json_agg(row_to_json(usrexp)) work_experiences,
@@ -41,11 +43,15 @@ const usersModel = {
         FROM users AS usr
         LEFT JOIN user_experiences AS usrexp
         ON usr.id = usrexp.user_id
-        LEFT JOIN user_skills AS usrskill
+        LEFT JOIN (SELECT user_id, skill_name FROM user_skills) AS usrskill
         ON usr.id = usrskill.user_id
         LEFT JOIN user_portfolios AS usrportf
         ON usr.id = usrportf.user_id
-        ${search ? `WHERE name ILIKE '%${search}%'` : ""}
+        ${
+          search
+            ? `WHERE name ILIKE '%${search}%' OR skill_name ILIKE '%${search}%' `
+            : ""
+        }
         ${catJobStatus ? `WHERE job_status ILIKE '%${catJobStatus}%'` : ""}
         ${catSkill ? `WHERE skill_name ILIKE '%${catSkill}%'` : ""}
         GROUP BY usr.id LIMIT ${limit} OFFSET ${(page - 1) * limit}`,
