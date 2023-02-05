@@ -46,10 +46,11 @@ const authModel = {
     job_status = "",
     // avatar = "",
     file,
+    role,
   }) => {
     return new Promise((resolve, reject) => {
       db.query(
-        `INSERT INTO users (id, name, email, phone, perusahaan, bidang_perusahaan, password, job_desk, job_status, avatar) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+        `INSERT INTO users (id, name, email, phone, perusahaan, bidang_perusahaan, password, job_desk, job_status, avatar, role) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
         [
           uuidv4(),
           name,
@@ -62,6 +63,7 @@ const authModel = {
           job_status,
           // avatar,
           file,
+          role,
         ],
         (error, result) => {
           if (error) {
@@ -78,6 +80,7 @@ const authModel = {
               // job_status,
               // avatar,
               file,
+              role,
             });
           }
         }

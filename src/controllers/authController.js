@@ -43,6 +43,7 @@ const authController = {
       job_desk,
       job_status,
       // avatar,
+      role,
     } = req.body;
     if (
       name == undefined ||
@@ -95,6 +96,7 @@ const authController = {
                 job_status,
                 // avatar,
                 file: req.file,
+                role,
               };
               return authModel
                 .register(request)
