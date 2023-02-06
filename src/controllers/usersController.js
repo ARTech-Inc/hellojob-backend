@@ -178,11 +178,14 @@ const usersController = {
   update: (req, res) => {
     const request = {
       ...req.body,
+      file: req.file,
       id: req.params.id,
     };
+    // console.log(request);
     return usersModel
       .update(request)
       .then((result) => {
+        // console.log(result);
         if (result == undefined) {
           return res.status(404).send({ message: "User id not found!" });
         }

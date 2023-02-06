@@ -267,6 +267,7 @@ const usersModel = {
     akun_instagram,
     akun_linkedin,
     akun_github,
+    file,
   }) => {
     return new Promise((resolve, reject) => {
       db.query(`SELECT * FROM users WHERE id = '${id}'`, (error, result) => {
@@ -294,6 +295,8 @@ const usersModel = {
               akun_linkedin || result.rows[0].akun_linkedin
             }', akun_github = '${
               akun_github || result.rows[0].akun_github
+            }', avatar = '${
+              file ? file.filename : result.rows[0].avatar
             }' WHERE id = '${id}'`,
             (error, result) => {
               if (error) {
@@ -311,6 +314,7 @@ const usersModel = {
                   akun_instagram,
                   akun_linkedin,
                   akun_github,
+                  avatar: file,
                 });
               }
             }
