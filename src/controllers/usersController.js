@@ -1,4 +1,5 @@
 const usersModel = require("../models/usersModel");
+const pathExtname = require("path");
 
 const usersController = {
   get: (req, res) => {
@@ -181,7 +182,20 @@ const usersController = {
       file: req.file,
       id: req.params.id,
     };
-    // console.log(request);
+    // 1048576 = 1mb
+    let extFile = pathExtname.extname(request.file.originalname);
+    console.log(request.file.size);
+    if (
+      extFile !== ".jpeg" &&
+      extFile !== ".jpg" &&
+      extFile !== ".png" &&
+      extFile !== ".webp"
+    ) {
+      return res.status(400).send({ message: "Only image are allowed!" });
+    }
+    if (request.file.size > 1048576 * 5) {
+      return res.status(400).send({ message: "Size limit for avatar is 5MB" });
+    }
     return usersModel
       .update(request)
       .then((result) => {
