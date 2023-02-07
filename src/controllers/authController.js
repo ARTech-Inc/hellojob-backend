@@ -101,7 +101,7 @@ const authController = {
               return authModel
                 .register(request)
                 .then((result) => {
-                  console.log(result);
+                  // console.log(result);
                   return res.status(201).send({
                     message: `Register ${result.name} is success!`,
                     data: result,

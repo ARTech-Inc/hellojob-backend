@@ -11,42 +11,13 @@ const usersModel = {
       page = 1,
     } = queryParams;
     return new Promise((resolve, reject) => {
-      // db.query(
-      //   `SELECT * FROM users WHERE name ILIKE '%${search}%' AND job_status ILIKE '%${category}%' LIMIT ${limit} OFFSET ${
-      //     (page - 1) * limit
-      //   }`,
-      //   (error, result) => {
-      //     if (error) {
-      //       return reject(error.message);
-      //     } else {
-      //       return resolve(result.rows);
-      //     }
-      //   }
-      // );
       db.query(
-        // COMPARE
-        // `SELECT
-        //   usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role,
-        //   json_agg(row_to_json(usrexp)) work_experiences
-        //   FROM users AS usr
-        //   INNER JOIN (SELECT experience_id, nama_perusahaan, posisi, tanggal_masuk, tanggal_keluar, deskripsi FROM user_experiences) AS usrexp
-        //   ON usr.id = usrexp.user_id
-        //   GROUP BY usr.id
-        //   `,
-        // LEFT JOIN user_skills AS usrskill
-
         `SELECT
         usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role, usr.avatar,
-        json_agg(row_to_json(usrexp)) work_experiences,
-        json_agg(row_to_json(usrskill)) skills,
-        json_agg(row_to_json(usrportf)) portfolios
+        json_agg(row_to_json(usrskill)) skills
         FROM users AS usr
-        LEFT JOIN user_experiences AS usrexp
-        ON usr.id = usrexp.user_id
         LEFT JOIN (SELECT user_id, skill_name FROM user_skills) AS usrskill
         ON usr.id = usrskill.user_id
-        LEFT JOIN user_portfolios AS usrportf
-        ON usr.id = usrportf.user_id
         ${
           search
             ? `WHERE name ILIKE '%${search}%' OR skill_name ILIKE '%${search}%' `
@@ -71,16 +42,10 @@ const usersModel = {
         `
         SELECT
         usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role, usr.avatar,
-        json_agg(row_to_json(usrexp)) work_experiences,
-        json_agg(row_to_json(usrskill)) skills,
-        json_agg(row_to_json(usrportf)) portfolios
+        json_agg(row_to_json(usrskill)) skills
         FROM users AS usr
-        LEFT JOIN user_experiences AS usrexp
-        ON usr.id = usrexp.user_id
         LEFT JOIN user_skills AS usrskill
         ON usr.id = usrskill.user_id
-        LEFT JOIN user_portfolios AS usrportf
-        ON usr.id = usrportf.user_id
         WHERE usr.id = '${id}'
         GROUP BY usr.id
         `,
@@ -88,7 +53,26 @@ const usersModel = {
           if (error) {
             return reject(error.message);
           } else {
-            return resolve(result.rows);
+            db.query(
+              `SELECT * FROM user_experiences WHERE user_id = '${id}'`,
+              (errorExp, resultExp) => {
+                db.query(
+                  `SELECT * FROM user_portfolios WHERE user_id = '${id}'`,
+                  (errorPortf, resultPortf) => {
+                    console.log({
+                      ...result.rows[0],
+                      work_experience: resultExp.rows,
+                      portfolio: resultPortf,
+                    });
+                    return resolve({
+                      ...result.rows[0],
+                      work_experience: resultExp.rows,
+                      portfolio: resultPortf.rows,
+                    });
+                  }
+                );
+              }
+            );
           }
         }
       );
@@ -155,104 +139,104 @@ const usersModel = {
     });
   },
 
-  addExpr: ({
-    id,
-    user_id,
-    nama_perusahaan,
-    posisi,
-    tanggal_masuk,
-    tanggal_keluar,
-    deskripsi,
-  }) => {
-    return new Promise((resolve, reject) => {
-      db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
-        if (error) {
-          return reject(error.message);
-        } else {
-          db.query(
-            `INSERT INTO user_experiences (experience_id, user_id, nama_perusahaan, posisi, tanggal_masuk, tanggal_keluar, deskripsi) VALUES ('${uuidv4()}', '${
-              result.rows[0].id
-            }' ,'${nama_perusahaan}', '${posisi}','${tanggal_masuk}', '${tanggal_keluar}', '${deskripsi}')`,
-            (error, result) => {
-              if (error) {
-                return reject(error.message);
-              } else {
-                console.log(nama_perusahaan);
-                return resolve({
-                  user_id,
-                  nama_perusahaan,
-                  posisi,
-                  tanggal_masuk,
-                  tanggal_keluar,
-                  deskripsi,
-                });
-              }
-            }
-          );
-        }
-      });
-    });
-  },
+  // addExpr: ({
+  //   id,
+  //   user_id,
+  //   nama_perusahaan,
+  //   posisi,
+  //   tanggal_masuk,
+  //   tanggal_keluar,
+  //   deskripsi,
+  // }) => {
+  //   return new Promise((resolve, reject) => {
+  //     db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
+  //       if (error) {
+  //         return reject(error.message);
+  //       } else {
+  //         db.query(
+  //           `INSERT INTO user_experiences (experience_id, user_id, nama_perusahaan, posisi, tanggal_masuk, tanggal_keluar, deskripsi) VALUES ('${uuidv4()}', '${
+  //             result.rows[0].id
+  //           }' ,'${nama_perusahaan}', '${posisi}','${tanggal_masuk}', '${tanggal_keluar}', '${deskripsi}')`,
+  //           (error, result) => {
+  //             if (error) {
+  //               return reject(error.message);
+  //             } else {
+  //               console.log(nama_perusahaan);
+  //               return resolve({
+  //                 user_id,
+  //                 nama_perusahaan,
+  //                 posisi,
+  //                 tanggal_masuk,
+  //                 tanggal_keluar,
+  //                 deskripsi,
+  //               });
+  //             }
+  //           }
+  //         );
+  //       }
+  //     });
+  //   });
+  // },
 
-  addSkill: ({ id, user_id, skill_name }) => {
-    return new Promise((resolve, reject) => {
-      db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
-        if (error) {
-          return reject(error.message);
-        } else {
-          db.query(
-            `INSERT INTO user_skills (skill_id, user_id, skill_name) VALUES ('${uuidv4()}', '${
-              result.rows[0].id
-            }' , '${skill_name}')`,
-            (error, result) => {
-              if (error) {
-                return reject(error.message);
-              } else {
-                return resolve({
-                  user_id,
-                  skill_name,
-                });
-              }
-            }
-          );
-        }
-      });
-    });
-  },
+  // addSkill: ({ id, user_id, skill_name }) => {
+  //   return new Promise((resolve, reject) => {
+  //     db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
+  //       if (error) {
+  //         return reject(error.message);
+  //       } else {
+  //         db.query(
+  //           `INSERT INTO user_skills (skill_id, user_id, skill_name) VALUES ('${uuidv4()}', '${
+  //             result.rows[0].id
+  //           }' , '${skill_name}')`,
+  //           (error, result) => {
+  //             if (error) {
+  //               return reject(error.message);
+  //             } else {
+  //               return resolve({
+  //                 user_id,
+  //                 skill_name,
+  //               });
+  //             }
+  //           }
+  //         );
+  //       }
+  //     });
+  //   });
+  // },
 
-  addPortf: ({ id, app_name, link_repo, file }) => {
-    return new Promise((resolve, reject) => {
-      db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
-        if (error) {
-          return reject(error.message);
-        } else {
-          // for (let i = 0; i < file.length; i++) {
-          db.query(
-            `INSERT INTO user_portfolios (portfolio_id, user_id, filename, app_name, link_repo) VALUES ('${uuidv4()}', '${
-              result.rows[0].id
-            }', '${file.filename}', '${app_name}', '${link_repo}')`,
-            (err, reslt) => {
-              if (err) {
-                return reject(err.message);
-              } else {
-                // kedepannya query di bawah ini untuk portfolio images
-                // db.query(
-                //   `INSERT INTO portfolio_images (portfolio_id, user_id, filename, alt_name) VALUES (, result.rows[0].id)`
-                // )
-                return resolve({
-                  user_id: id,
-                  portfolio_images: file,
-                  app_name,
-                  link_repo,
-                });
-              }
-            }
-          );
-          // }
-        }
-      });
-    });
-  },
+  // addPortf: ({ id, app_name, link_repo, file }) => {
+  //   return new Promise((resolve, reject) => {
+  //     db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
+  //       if (error) {
+  //         return reject(error.message);
+  //       } else {
+  //         // for (let i = 0; i < file.length; i++) {
+  //         db.query(
+  //           `INSERT INTO user_portfolios (portfolio_id, user_id, filename, app_name, link_repo) VALUES ('${uuidv4()}', '${
+  //             result.rows[0].id
+  //           }', '${file.filename}', '${app_name}', '${link_repo}')`,
+  //           (err, reslt) => {
+  //             if (err) {
+  //               return reject(err.message);
+  //             } else {
+  //               // kedepannya query di bawah ini untuk portfolio images
+  //               // db.query(
+  //               //   `INSERT INTO portfolio_images (portfolio_id, user_id, filename, alt_name) VALUES (, result.rows[0].id)`
+  //               // )
+  //               return resolve({
+  //                 user_id: id,
+  //                 portfolio_images: file,
+  //                 app_name,
+  //                 link_repo,
+  //               });
+  //             }
+  //           }
+  //         );
+  //         // }
+  //       }
+  //     });
+  //   });
+  // },
 
   update: ({
     id,
