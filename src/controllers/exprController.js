@@ -41,7 +41,10 @@ const exprController = {
         }
         return res
           .status(201)
-          .send({ data: result, message: `Add pengalaman kerja success!` });
+          .send({
+            data: result,
+            message: `Add pengalaman kerja ${request.id} success!`,
+          });
       })
       .catch((err) => {
         return res.status(500).send({ message: err });

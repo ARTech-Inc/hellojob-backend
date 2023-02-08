@@ -183,22 +183,30 @@ const usersController = {
       file: req.file,
       id: req.params.id,
     };
+    // sementara error handling image tidak ada dulu
     // 1048576 = 1mb
-    let extFile = pathExtname.extname(request.file.originalname);
-    if (
-      extFile !== ".jpeg" &&
-      extFile !== ".jpg" &&
-      extFile !== ".png" &&
-      extFile !== ".webp"
-    ) {
-      return res.status(400).send({ message: "Only image are allowed!" });
-    }
-    if (request.file.size > 1048576 * 5) {
-      return res.status(400).send({ message: "Size limit for avatar is 5MB" });
-    }
+    // let extFile = pathExtname.extname(
+    //   request.file ? request.file.originalname : ""
+    // );
+    // if(request.file === undefined){
+
+    // }
+    // if (
+    //   extFile !== ".jpeg" &&
+    //   extFile !== ".jpg" &&
+    //   extFile !== ".png" &&
+    //   extFile !== ".webp"
+    // ) {
+    //   return res.status(400).send({ message: "Only image are allowed!" });
+    // }
+    // if (request.file.size > 1048576 * 5) {
+    //   return res.status(400).send({ message: "Size limit for avatar is 5MB" });
+    // }
+    // console.log(request);
     return usersModel
       .update(request)
       .then((result) => {
+        console.log(req);
         if (result == undefined) {
           return res.status(404).send({ message: "User id not found!" });
         }
@@ -206,9 +214,10 @@ const usersController = {
         // unlink(`public/uploads/images/${result.avatar.filename}`, (err) => {
         //   console.log(`Successfully delete ${result.avatar.filename}`);
         // });
-        return res
-          .status(200)
-          .send({ data: result, message: "Edit user profile success!" });
+        return res.status(200).send({
+          data: result,
+          message: `Edit user profile ${request.id} success!`,
+        });
       })
       .catch((err) => {
         return res.status(500).send({ message: err });
