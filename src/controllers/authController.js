@@ -98,6 +98,7 @@ const authController = {
                 file: req.file,
                 role,
               };
+              console.log(request);
               return authModel
                 .register(request)
                 .then((result) => {
