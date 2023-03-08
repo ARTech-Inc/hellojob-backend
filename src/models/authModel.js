@@ -5,36 +5,25 @@ const bcrypt = require("bcrypt");
 const authModel = {
   login: ({ email, password }) => {
     return new Promise((resolve, reject) => {
-      db.query(`SELECT * FROM users WHERE email=$1`, [email], (err, result) => {
-        if (err) {
-          return reject(err.message);
-        } else {
-          if (result.rows.length == 0) {
-            return reject("Email or password is wrong! Please try again.");
-          } else {
-            bcrypt.compare(
-              password,
-              result.rows[0].password,
-              (err, hashingResult) => {
-                if (err) {
-                  return reject(
-                    "Email or password is wrong! Please try again."
-                  );
-                }
-                if (!hashingResult) {
-                  return reject(
-                    "Email or password is wrong! Please try again."
-                  );
-                } else {
-                  return resolve(result.rows[0]);
-                }
-              }
-            );
-          }
+      db.query(
+        `SELECT * FROM users WHERE email = $1`,
+        [email],
+        (error, result) => {
+          if (error) return reject(error.message);
+
+          const data = result.rows[0];
+          bcrypt.compare(password, data.password, (err, hashingResult) => {
+            if (err)
+              return reject("Email or password is wrong! Please try again.");
+            if (!hashingResult)
+              return reject("Email or password is wrong! Please try again.");
+            return resolve(data);
+          });
         }
-      });
+      );
     });
   },
+
   register: ({
     name,
     email,
@@ -44,7 +33,6 @@ const authModel = {
     bidang_perusahaan = "",
     job_desk = "",
     job_status = "",
-    // avatar = "",
     file,
     role,
   }) => {
@@ -61,28 +49,22 @@ const authModel = {
           password,
           job_desk,
           job_status,
-          // avatar,
           file,
           role,
         ],
-        (error, result) => {
-          if (error) {
-            return reject(error.message);
-          } else {
-            return resolve({
-              name,
-              email,
-              phone,
-              //   password,
-              perusahaan,
-              bidang_perusahaan,
-              // job_desk,
-              // job_status,
-              // avatar,
-              file,
-              role,
-            });
-          }
+        (error) => {
+          if (error) return reject(error.message);
+          return resolve({
+            name,
+            email,
+            phone,
+            perusahaan,
+            bidang_perusahaan,
+            job_desk,
+            job_status,
+            file,
+            role,
+          });
         }
       );
     });

@@ -11,6 +11,7 @@ router.get("/:id", usersController.getDetail);
 router.patch("/:id", formUpload.single("ava"), usersController.update);
 router.post("/", formUpload.single("ava"), usersController.add);
 router.delete("/:id", formUpload.single("ava"), usersController.remove);
+router.delete("/", usersController.removeAll);
 // router.post("/expr/:id", usersController.addExpr);
 // router.post("/skill/:id", usersController.addSkill);
 // router.post(

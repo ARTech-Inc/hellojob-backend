@@ -1,3 +1,4 @@
+const formResponse = require("../helpers/formResponse");
 const exprModel = require("../models/exprModel");
 
 const exprController = {
@@ -6,48 +7,38 @@ const exprController = {
       ...req.body,
       id: req.params.id,
     };
-    if (request.nama_perusahaan.length == 0) {
-      return res
-        .status(400)
-        .send({ message: "Company name field should be filled!" });
-    }
-    if (request.posisi.length == 0) {
-      return res
-        .status(400)
-        .send({ message: "Position field should be filled!" });
-    }
-    if (request.tanggal_masuk.length == 0) {
-      return res
-        .status(400)
-        .send({ message: "Entry date field should be filled!" });
-    }
-    if (request.tanggal_keluar.length == 0) {
-      return res
-        .status(400)
-        .send({ message: "Out date field should be filled!" });
-    }
-    if (request.deskripsi.length == 0) {
-      return res
-        .status(400)
-        .send({ message: "Description field should be filled!" });
-    }
+    if (request.nama_perusahaan.length == 0)
+      return formResponse(400, {}, "Company name field should be filled!", res);
+
+    if (request.posisi.length == 0)
+      return formResponse(400, {}, "Position field should be filled!", res);
+
+    if (request.tanggal_masuk.length == 0)
+      return formResponse(400, {}, "Entry date field should be filled!", res);
+
+    if (request.tanggal_keluar.length == 0)
+      return formResponse(400, {}, "Out date field should be filled!", res);
+
+    if (request.deskripsi.length == 0)
+      return formResponse(400, {}, "Description field should be filled!", res);
+
     return exprModel
       .addExp(request)
       .then((result) => {
-        if (result == undefined) {
+        if (result == undefined)
           return res
             .status(404)
             .send({ data: result, message: `Users was not found!` });
-        }
-        return res
-          .status(201)
-          .send({
-            data: result,
-            message: `Add pengalaman kerja ${request.id} success!`,
-          });
+
+        return formResponse(
+          201,
+          result,
+          `Successfully add pengalaman kerja at ${request.nama_perusahaan}!`,
+          res
+        );
       })
       .catch((err) => {
-        return res.status(500).send({ message: err });
+        return formResponse(500, {}, err, res);
       });
   },
 };

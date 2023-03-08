@@ -6,7 +6,8 @@ const portfolioController = require("../controllers/portfolioController");
 
 router.post(
   "/:id",
-  formUpload.single("portfolio_image"),
+  // formUpload.single("portfolio_image"),
+  formUpload.array("portfolio_images"),
   portfolioController.addPortfolio
 );
 

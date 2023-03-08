@@ -1,6 +1,7 @@
 const usersModel = require("../models/usersModel");
 const pathExtname = require("path");
 const { unlink } = require("fs");
+const formResponse = require("../helpers/formResponse");
 
 const usersController = {
   get: (req, res) => {
@@ -183,46 +184,29 @@ const usersController = {
       file: req.file,
       id: req.params.id,
     };
-    // sementara error handling image tidak ada dulu
-    // 1048576 = 1mb
-    // let extFile = pathExtname.extname(
-    //   request.file ? request.file.originalname : ""
-    // );
-    // if(request.file === undefined){
 
-    // }
-    // if (
-    //   extFile !== ".jpeg" &&
-    //   extFile !== ".jpg" &&
-    //   extFile !== ".png" &&
-    //   extFile !== ".webp"
-    // ) {
-    //   return res.status(400).send({ message: "Only image are allowed!" });
-    // }
-    // if (request.file.size > 1048576 * 5) {
-    //   return res.status(400).send({ message: "Size limit for avatar is 5MB" });
-    // }
-    // console.log(request);
     return usersModel
       .update(request)
       .then((result) => {
-        console.log(req);
-        if (result == undefined) {
-          return res.status(404).send({ message: "User id not found!" });
-        }
-        // console.log(result);
-        // unlink(`public/uploads/images/${result.avatar.filename}`, (err) => {
-        //   console.log(`Successfully delete ${result.avatar.filename}`);
-        // });
-        return res.status(200).send({
-          data: result,
-          message: `Edit user profile ${request.id} success!`,
-        });
+        if (request.file == undefined)
+          return formResponse(
+            200,
+            result,
+            `Successfully edit user profile ${request.id} without avatar`,
+            res
+          );
+        return formResponse(
+          200,
+          result,
+          `Edit user profile ${request.id} success!`,
+          res
+        );
       })
       .catch((err) => {
         return res.status(500).send({ message: err });
       });
   },
+
   remove: (req, res) => {
     const id = req.params.id;
     return usersModel
@@ -231,6 +215,17 @@ const usersController = {
         return res
           .status(200)
           .send({ message: `Deleting users ${id} success!` });
+      })
+      .catch((err) => {
+        return res.status(500).send(err);
+      });
+  },
+
+  removeAll: (req, res) => {
+    return usersModel
+      .removeAll()
+      .then((result) => {
+        return res.status(200).send({ message: `Deleting all users success!` });
       })
       .catch((err) => {
         return res.status(500).send(err);

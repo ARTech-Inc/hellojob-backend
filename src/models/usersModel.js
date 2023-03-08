@@ -50,30 +50,25 @@ const usersModel = {
         GROUP BY usr.id
         `,
         (error, result) => {
-          if (error) {
-            return reject(error.message);
-          } else {
-            db.query(
-              `SELECT * FROM user_experiences WHERE user_id = '${id}'`,
-              (errorExp, resultExp) => {
-                db.query(
-                  `SELECT * FROM user_portfolios WHERE user_id = '${id}'`,
-                  (errorPortf, resultPortf) => {
-                    console.log({
-                      ...result.rows[0],
-                      work_experience: resultExp.rows,
-                      portfolio: resultPortf,
-                    });
-                    return resolve({
-                      ...result.rows[0],
-                      work_experience: resultExp.rows,
-                      portfolio: resultPortf.rows,
-                    });
-                  }
-                );
-              }
-            );
-          }
+          const userData = result.rows[0];
+          if (error) return reject(error.message);
+          db.query(
+            `SELECT * FROM user_experiences WHERE user_id = '${id}'`,
+            (errorExp, resultExp) => {
+              if (errorExp) return reject(errorExp.message);
+              db.query(
+                `SELECT * FROM user_portfolios WHERE user_id = '${id}'`,
+                (errorPortf, resultPortf) => {
+                  if (errorPortf) return reject(errorPortf.message);
+                  return resolve({
+                    ...userData,
+                    work_experience: resultExp.rows,
+                    portfolio: resultPortf.rows,
+                  });
+                }
+              );
+            }
+          );
         }
       );
     });
@@ -255,55 +250,50 @@ const usersModel = {
   }) => {
     return new Promise((resolve, reject) => {
       db.query(`SELECT * FROM users WHERE id = '${id}'`, (error, result) => {
-        if (error) {
-          return reject(error.message);
-        } else {
-          db.query(
-            `UPDATE users SET name = '${
-              name || result.rows[0].name
-            }', phone = '${phone || result.rows[0].phone}', email = '${
-              email || result.rows[0].email
-            }', domisili = '${
-              domisili || result.rows[0].domisili
-            }', job_desk = '${
-              job_desk || result.rows[0].job_desk
-            }', job_status = '${
-              job_status || result.rows[0].job_status
-            }', description = '${
-              description || result.rows[0].description
-            }', bidang_perusahaan = '${
-              bidang_perusahaan || result.rows[0].bidang_perusahaan
-            }', akun_instagram = '${
-              akun_instagram || result.rows[0].akun_instagram
-            }', akun_linkedin = '${
-              akun_linkedin || result.rows[0].akun_linkedin
-            }', akun_github = '${
-              akun_github || result.rows[0].akun_github
-            }', avatar = '${
-              file ? file.filename : result.rows[0].avatar
-            }' WHERE id = '${id}'`,
-            (error, result) => {
-              if (error) {
-                return reject(error.message);
-              } else {
-                return resolve({
-                  name,
-                  phone,
-                  email,
-                  domisili,
-                  job_desk,
-                  job_status,
-                  description,
-                  bidang_perusahaan,
-                  akun_instagram,
-                  akun_linkedin,
-                  akun_github,
-                  avatar: file,
-                });
-              }
+        const dataUser = result.rows[0];
+        if (error) return reject(error.message);
+        if (dataUser == undefined) return reject("User not found!");
+        db.query(
+          `UPDATE users SET name = '${name || dataUser.name}', phone = '${
+            phone || dataUser.phone
+          }', email = '${email || dataUser.email}', domisili = '${
+            domisili || dataUser.domisili
+          }', job_desk = '${job_desk || dataUser.job_desk}', job_status = '${
+            job_status || dataUser.job_status
+          }', description = '${
+            description || dataUser.description
+          }', bidang_perusahaan = '${
+            bidang_perusahaan || dataUser.bidang_perusahaan
+          }', akun_instagram = '${
+            akun_instagram || dataUser.akun_instagram
+          }', akun_linkedin = '${
+            akun_linkedin || dataUser.akun_linkedin
+          }', akun_github = '${
+            akun_github || dataUser.akun_github
+          }', avatar = '${
+            file ? file.filename : dataUser.avatar
+          }' WHERE id = '${id}'`,
+          (error, result) => {
+            if (error) {
+              return reject(error.message);
+            } else {
+              return resolve({
+                name,
+                phone,
+                email,
+                domisili,
+                job_desk,
+                job_status,
+                description,
+                bidang_perusahaan,
+                akun_instagram,
+                akun_linkedin,
+                akun_github,
+                avatar: file,
+              });
             }
-          );
-        }
+          }
+        );
       });
     });
   },
@@ -311,6 +301,18 @@ const usersModel = {
   remove: (id) => {
     return new Promise((resolve, reject) => {
       db.query(`DELETE FROM users WHERE id = '${id}'`, (error, result) => {
+        if (error) {
+          return reject(error.message);
+        } else {
+          return resolve(result);
+        }
+      });
+    });
+  },
+
+  removeAll: () => {
+    return new Promise((resolve, reject) => {
+      db.query(`DELETE FROM users`, (error, result) => {
         if (error) {
           return reject(error.message);
         } else {

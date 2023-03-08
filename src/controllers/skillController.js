@@ -6,7 +6,6 @@ const skillController = {
       ...req.body,
       id: req.params.id,
     };
-    console.log(request.skill_name.length);
     if (request.skill_name.length == 0) {
       return res.status(400).send({ message: `Skill field should be filled!` });
     }
@@ -18,7 +17,6 @@ const skillController = {
             .status(404)
             .send({ data: result, message: `User was not found!` });
         }
-        console.log(result);
         return res.status(201).send({
           data: result,
           message: `Add skill for user ${request.id} is success!`,
