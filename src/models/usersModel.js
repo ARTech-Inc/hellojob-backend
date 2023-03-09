@@ -57,28 +57,27 @@ const usersModel = {
             (errorExp, resultExp) => {
               if (errorExp) return reject(errorExp.message);
               db.query(
-                `SELECT * FROM user_portfolios WHERE user_id = '${id}'`,
+                `SELECT portf.portfolio_id, portf.user_id, portf.app_name, portf.link_repo,
+                json_agg(row_to_json(portfimg)) portfolio_images
+                FROM user_portfolios AS portf
+                LEFT JOIN portfolio_images AS portfimg
+                ON portf.portfolio_id = portfimg.portfolio_id
+                WHERE portf.portfolio_id = portfimg.portfolio_id
+                GROUP BY portf.portfolio_id
+                `,
                 (errorPortf, resultPortf) => {
+                  // console.log(resultPortf);
                   if (errorPortf) return reject(errorPortf.message);
-                  db.query(
-                    `SELECT * FROM portfolio_images WHERE user_id = '${id}'`,
-                    (errorPortfImage, resultPortfImage) => {
-                      const portfolioImages = resultPortfImage.rows;
-                      const portfolio = resultPortf.rows;
-                      if (errorPortfImage)
-                        return reject(errorPortfImage.message);
-                      console.log(portfolioImages);
-                      return resolve({
-                        ...userData,
-                        work_experience: resultExp.rows,
-                        // portfolio: resultPortf.rows,
-                        portfolio: portfolio,
-                        portfolio_images: portfolioImages,
-                        // portfolioImages,
-                        // portfolio_images: portfolioImages,
-                      });
-                    }
-                  );
+                  // return resolve({
+                  //   ...userData,
+                  //   // work_experience: resultExp.rows,
+                  //   // portfolio: resultPortf.rows,
+                  //   // portfolio: resultPortf.rows,
+                  //   // portfolio_images: portfolioImages,
+                  //   // portfolioImages,
+                  //   // portfolio_images: portfolioImages,
+                  // });
+                  return resolve(resultPortf.rows);
                 }
               );
             }
@@ -87,6 +86,57 @@ const usersModel = {
       );
     });
   },
+  // getDetail: (id) => {
+  //   return new Promise((resolve, reject) => {
+  //     db.query(
+  //       `
+  //       SELECT
+  //       usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role, usr.avatar,
+  //       json_agg(row_to_json(usrskill)) skills
+  //       FROM users AS usr
+  //       LEFT JOIN user_skills AS usrskill
+  //       ON usr.id = usrskill.user_id
+  //       WHERE usr.id = '${id}'
+  //       GROUP BY usr.id
+  //       `,
+  //       (error, result) => {
+  //         const userData = result.rows[0];
+  //         if (error) return reject(error.message);
+  //         db.query(
+  //           `SELECT * FROM user_experiences WHERE user_id = '${id}'`,
+  //           (errorExp, resultExp) => {
+  //             if (errorExp) return reject(errorExp.message);
+  //             db.query(
+  //               `SELECT * FROM user_portfolios WHERE user_id = '${id}'`,
+  //               (errorPortf, resultPortf) => {
+  //                 if (errorPortf) return reject(errorPortf.message);
+  //                 db.query(
+  //                   `SELECT * FROM portfolio_images WHERE user_id = '${id}'`,
+  //                   (errorPortfImage, resultPortfImage) => {
+  //                     const portfolioImages = resultPortfImage.rows;
+  //                     const portfolio = resultPortf.rows;
+  //                     if (errorPortfImage)
+  //                       return reject(errorPortfImage.message);
+  //                     console.log(portfolioImages);
+  //                     return resolve({
+  //                       ...userData,
+  //                       work_experience: resultExp.rows,
+  //                       // portfolio: resultPortf.rows,
+  //                       portfolio: portfolio,
+  //                       portfolio_images: portfolioImages,
+  //                       // portfolioImages,
+  //                       // portfolio_images: portfolioImages,
+  //                     });
+  //                   }
+  //                 );
+  //               }
+  //             );
+  //           }
+  //         );
+  //       }
+  //     );
+  //   });
+  // },
 
   add: ({
     id,

@@ -25,7 +25,7 @@ const portfolioController = {
     return portfolioModel
       .addPortfolio(request)
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         if (result == undefined) {
           return res
             .status(404)

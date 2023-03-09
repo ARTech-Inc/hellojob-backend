@@ -10,14 +10,15 @@ const portfolioModel = {
 
         db.query(
           `INSERT INTO user_portfolios (portfolio_id, user_id, app_name, link_repo) VALUES ('${uuidv4()}', '${userID}', '${app_name}', '${link_repo}')`,
-          (errorPortfolio) => {
+          (errorPortfolio, result) => {
             if (errorPortfolio) return reject(errorPortfolio.message);
 
             db.query(
-              `SELECT portfolio_id, app_name FROM user_portfolios WHERE user_id = '${userID}'`,
-              (errorGetPortfolioID, resultGetPortfolioData) => {
-                const portfolioID = resultGetPortfolioData.rows[0].portfolio_id;
-                const appName = resultGetPortfolioData.rows[0].app_name;
+              `SELECT portfolio_id, app_name FROM user_portfolios WHERE app_name = '${app_name}'`,
+              async (errorGetPortfolioID, resultGetPortfolioData) => {
+                const portfolioID = await resultGetPortfolioData.rows[0]
+                  .portfolio_id;
+                const appName = await resultGetPortfolioData.rows[0].app_name;
                 if (errorGetPortfolioID)
                   return reject(errorGetPortfolioID.message);
 
