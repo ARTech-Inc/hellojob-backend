@@ -6,7 +6,7 @@ const router = require("./src/routes/index");
 const { urlencoded, json } = require("body-parser");
 const cors = require("cors");
 // app.use(express.static("public"));
-app.use(express.static("public/uploads/images"));
+app.use(express.static("public/uploads"));
 app.use(urlencoded({ extended: true }));
 app.use(json());
 app.use(cors());
