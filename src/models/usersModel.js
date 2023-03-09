@@ -251,6 +251,7 @@ const usersModel = {
     return new Promise((resolve, reject) => {
       db.query(`SELECT * FROM users WHERE id = '${id}'`, (error, result) => {
         const dataUser = result.rows[0];
+        const oldAvatar = dataUser.avatar;
         if (error) return reject(error.message);
         if (dataUser == undefined) return reject("User not found!");
         db.query(
@@ -289,6 +290,7 @@ const usersModel = {
                 akun_instagram,
                 akun_linkedin,
                 akun_github,
+                oldAvatar: oldAvatar,
                 avatar: file,
               });
             }
