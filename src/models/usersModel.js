@@ -77,7 +77,10 @@ const usersModel = {
                   //   // portfolioImages,
                   //   // portfolio_images: portfolioImages,
                   // });
-                  return resolve(resultPortf.rows);
+                  return resolve({
+                    ...userData,
+                    portfolio: resultPortf.rows,
+                  });
                 }
               );
             }
