@@ -60,11 +60,25 @@ const usersModel = {
                 `SELECT * FROM user_portfolios WHERE user_id = '${id}'`,
                 (errorPortf, resultPortf) => {
                   if (errorPortf) return reject(errorPortf.message);
-                  return resolve({
-                    ...userData,
-                    work_experience: resultExp.rows,
-                    portfolio: resultPortf.rows,
-                  });
+                  db.query(
+                    `SELECT * FROM portfolio_images WHERE user_id = '${id}'`,
+                    (errorPortfImage, resultPortfImage) => {
+                      const portfolioImages = resultPortfImage.rows;
+                      const portfolio = resultPortf.rows;
+                      if (errorPortfImage)
+                        return reject(errorPortfImage.message);
+                      console.log(portfolioImages);
+                      return resolve({
+                        ...userData,
+                        work_experience: resultExp.rows,
+                        // portfolio: resultPortf.rows,
+                        portfolio: portfolio,
+                        portfolio_images: portfolioImages,
+                        // portfolioImages,
+                        // portfolio_images: portfolioImages,
+                      });
+                    }
+                  );
                 }
               );
             }
