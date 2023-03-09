@@ -36,6 +36,52 @@ const usersModel = {
       );
     });
   },
+  // getDetail: (id) => {
+  //   return new Promise((resolve, reject) => {
+  //     db.query(
+  //       `
+  //       SELECT
+  //       usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role, usr.avatar,
+  //       json_agg(row_to_json(usrskill)) skills
+  //       FROM users AS usr
+  //       LEFT JOIN user_skills AS usrskill
+  //       ON usr.id = usrskill.user_id
+  //       WHERE usr.id = '${id}'
+  //       GROUP BY usr.id
+  //       `,
+  //       (error, result) => {
+  //         const userData = result.rows[0];
+  //         if (error) return reject(error.message);
+  //         db.query(
+  //           `SELECT * FROM user_experiences WHERE user_id = '${id}'`,
+  //           (errorExp, resultExp) => {
+  //             if (errorExp) return reject(errorExp.message);
+  //             db.query(
+  //               `
+  //               SELECT * FROM user_portfolios WHERE user_id = '${id}'
+  //               `,
+  //               (errorPortf, resultPortf) => {
+  //                 console.log(resultPortf.rows);
+  //                 if (errorPortf) return reject(errorPortf.message);
+  //                 return resolve({
+  //                   ...userData,
+  //                   work_experiences: resultExp.rows,
+  //                   portfolio: resultPortf.rows,
+  //                   // buat nanti
+  //                   // portfolio: [{
+  //                   //   ...resultPortf.rows],
+  //                   //   portfolio_images: resultPortfImg.rows
+  //                   // },
+  //                 });
+  //               }
+  //             );
+  //           }
+  //         );
+  //       }
+  //     );
+  //   });
+  // },
+
   getDetail: (id) => {
     return new Promise((resolve, reject) => {
       db.query(
@@ -62,10 +108,11 @@ const usersModel = {
                 FROM user_portfolios AS portf
                 LEFT JOIN portfolio_images AS portfimg
                 ON portf.portfolio_id = portfimg.portfolio_id
-                WHERE portf.portfolio_id = portfimg.portfolio_id
+                WHERE portf.user_id = '${id}'
                 GROUP BY portf.portfolio_id
                 `,
                 (errorPortf, resultPortf) => {
+                  console.log(resultPortf.rows);
                   if (errorPortf) return reject(errorPortf.message);
                   return resolve({
                     ...userData,

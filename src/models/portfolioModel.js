@@ -14,7 +14,7 @@ const portfolioModel = {
             if (errorPortfolio) return reject(errorPortfolio.message);
 
             db.query(
-              `SELECT portfolio_id, app_name FROM user_portfolios WHERE app_name = '${app_name}'`,
+              `SELECT portfolio_id, app_name FROM user_portfolios WHERE app_name = '${app_name}' AND user_id = '${id}'`,
               async (errorGetPortfolioID, resultGetPortfolioData) => {
                 const portfolioID = await resultGetPortfolioData.rows[0]
                   .portfolio_id;
