@@ -36,51 +36,6 @@ const usersModel = {
       );
     });
   },
-  // getDetail: (id) => {
-  //   return new Promise((resolve, reject) => {
-  //     db.query(
-  //       `
-  //       SELECT
-  //       usr.id, usr.name, usr.email, usr.phone, usr.password, usr.domisili, usr.job_desk, usr.job_status, usr.description, usr.perusahaan, usr.bidang_perusahaan, usr.akun_instagram, usr.akun_linkedin, usr.akun_github, usr.role, usr.avatar,
-  //       json_agg(row_to_json(usrskill)) skills
-  //       FROM users AS usr
-  //       LEFT JOIN user_skills AS usrskill
-  //       ON usr.id = usrskill.user_id
-  //       WHERE usr.id = '${id}'
-  //       GROUP BY usr.id
-  //       `,
-  //       (error, result) => {
-  //         const userData = result.rows[0];
-  //         if (error) return reject(error.message);
-  //         db.query(
-  //           `SELECT * FROM user_experiences WHERE user_id = '${id}'`,
-  //           (errorExp, resultExp) => {
-  //             if (errorExp) return reject(errorExp.message);
-  //             db.query(
-  //               `
-  //               SELECT * FROM user_portfolios WHERE user_id = '${id}'
-  //               `,
-  //               (errorPortf, resultPortf) => {
-  //                 console.log(resultPortf.rows);
-  //                 if (errorPortf) return reject(errorPortf.message);
-  //                 return resolve({
-  //                   ...userData,
-  //                   work_experiences: resultExp.rows,
-  //                   portfolio: resultPortf.rows,
-  //                   // buat nanti
-  //                   // portfolio: [{
-  //                   //   ...resultPortf.rows],
-  //                   //   portfolio_images: resultPortfImg.rows
-  //                   // },
-  //                 });
-  //               }
-  //             );
-  //           }
-  //         );
-  //       }
-  //     );
-  //   });
-  // },
 
   getDetail: (id) => {
     return new Promise((resolve, reject) => {
@@ -112,7 +67,6 @@ const usersModel = {
                 GROUP BY portf.portfolio_id
                 `,
                 (errorPortf, resultPortf) => {
-                  console.log(resultPortf.rows);
                   if (errorPortf) return reject(errorPortf.message);
                   return resolve({
                     ...userData,
@@ -187,105 +141,6 @@ const usersModel = {
       );
     });
   },
-
-  // addExpr: ({
-  //   id,
-  //   user_id,
-  //   nama_perusahaan,
-  //   posisi,
-  //   tanggal_masuk,
-  //   tanggal_keluar,
-  //   deskripsi,
-  // }) => {
-  //   return new Promise((resolve, reject) => {
-  //     db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
-  //       if (error) {
-  //         return reject(error.message);
-  //       } else {
-  //         db.query(
-  //           `INSERT INTO user_experiences (experience_id, user_id, nama_perusahaan, posisi, tanggal_masuk, tanggal_keluar, deskripsi) VALUES ('${uuidv4()}', '${
-  //             result.rows[0].id
-  //           }' ,'${nama_perusahaan}', '${posisi}','${tanggal_masuk}', '${tanggal_keluar}', '${deskripsi}')`,
-  //           (error, result) => {
-  //             if (error) {
-  //               return reject(error.message);
-  //             } else {
-  //               console.log(nama_perusahaan);
-  //               return resolve({
-  //                 user_id,
-  //                 nama_perusahaan,
-  //                 posisi,
-  //                 tanggal_masuk,
-  //                 tanggal_keluar,
-  //                 deskripsi,
-  //               });
-  //             }
-  //           }
-  //         );
-  //       }
-  //     });
-  //   });
-  // },
-
-  // addSkill: ({ id, user_id, skill_name }) => {
-  //   return new Promise((resolve, reject) => {
-  //     db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
-  //       if (error) {
-  //         return reject(error.message);
-  //       } else {
-  //         db.query(
-  //           `INSERT INTO user_skills (skill_id, user_id, skill_name) VALUES ('${uuidv4()}', '${
-  //             result.rows[0].id
-  //           }' , '${skill_name}')`,
-  //           (error, result) => {
-  //             if (error) {
-  //               return reject(error.message);
-  //             } else {
-  //               return resolve({
-  //                 user_id,
-  //                 skill_name,
-  //               });
-  //             }
-  //           }
-  //         );
-  //       }
-  //     });
-  //   });
-  // },
-
-  // addPortf: ({ id, app_name, link_repo, file }) => {
-  //   return new Promise((resolve, reject) => {
-  //     db.query(`SELECT id FROM users WHERE id = '${id}'`, (error, result) => {
-  //       if (error) {
-  //         return reject(error.message);
-  //       } else {
-  //         // for (let i = 0; i < file.length; i++) {
-  //         db.query(
-  //           `INSERT INTO user_portfolios (portfolio_id, user_id, filename, app_name, link_repo) VALUES ('${uuidv4()}', '${
-  //             result.rows[0].id
-  //           }', '${file.filename}', '${app_name}', '${link_repo}')`,
-  //           (err, reslt) => {
-  //             if (err) {
-  //               return reject(err.message);
-  //             } else {
-  //               // kedepannya query di bawah ini untuk portfolio images
-  //               // db.query(
-  //               //   `INSERT INTO portfolio_images (portfolio_id, user_id, filename, alt_name) VALUES (, result.rows[0].id)`
-  //               // )
-  //               return resolve({
-  //                 user_id: id,
-  //                 portfolio_images: file,
-  //                 app_name,
-  //                 link_repo,
-  //               });
-  //             }
-  //           }
-  //         );
-  //         // }
-  //       }
-  //     });
-  //   });
-  // },
 
   update: ({
     id,

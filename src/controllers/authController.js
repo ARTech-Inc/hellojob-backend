@@ -177,7 +177,6 @@ const authController = {
   //               // file: req.files,
   //               file: req.file,
   //             };
-  //             console.log(request);
   //             return authModel
   //               .register(request)
   //               .then((result) => {
