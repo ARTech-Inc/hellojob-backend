@@ -104,7 +104,17 @@ Backend for HelloJob App for https://github.com/ARTech-Inc/hellojob-fe
 <!-- CONTACT -->
 ## Contact
 
-Maulana Rheza Ardiansyah - [@maulanarheza](https://www.linkedin.com/in/maulanarheza/) - [@rhezaardiansyahhhh](https://instagram.com/rhezaardiansyahhhh) - rhezaardiansyah222@gmail.com
+Team : ARTech - mailto:artechteam04@gmail.com
+
+
+
+<!-- ARTECH TEAM -->
+## ARTech Team Member
+<a href="https://github.com/MaulanaRhezaArdiansyah">Maulana Rheza Ardiansyah</a>
+<a href="https://github.com/ariffmaulana">Arif Maulana</a>
+<a href="https://github.com/AdrielMS">Adriel Muhammad Sjahranie</a>
+<a href="https://github.com/RamadanRangkutii">Ramadan Rangkuti</a>
+
 
 Project Link: [https://github.com/MaulanaRhezaArdiansyah/kopiku-backend](https://github.com/MaulanaRhezaArdiansyah/kopiku-backend)
 
