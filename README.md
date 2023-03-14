@@ -73,7 +73,7 @@ Backend for HelloJob App for https://github.com/ARTech-Inc/hellojob-fe
 
 ### Postman Collection
 
-[![Hellojob Database Schema]](https://documenter.getpostman.com/view/23895523/2s935kN58Q)
+[Hellojob Database Schema](https://documenter.getpostman.com/view/23895523/2s935kN58Q)
 
 
 
