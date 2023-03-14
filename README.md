@@ -71,6 +71,12 @@ Backend for HelloJob App for https://github.com/ARTech-Inc/hellojob-fe
 [![Hellojob Database Schema][hellojob-db-schema]](https://drawsql.app/teams/artech/diagrams/hellojob-app)
 
 
+### Postman Collection
+
+[![Hellojob Database Schema]](https://documenter.getpostman.com/view/23895523/2s935kN58Q)
+
+
+
 <p align="right">(<a href="#hellojob-top">back to top</a>)</p>
 
 
