@@ -112,8 +112,8 @@ Project Link: [https://github.com/MaulanaRhezaArdiansyah/kopiku-backend](https:/
 
 
 <!-- LINKS -->
-[product-screenshot]: https://kopiku.up.railway.app/images/hellojob-landing-2.png
-[hellojob-db-schema]: https://kopiku.up.railway.app/images/db-schema.png
+[product-screenshot]: https://hellojob.up.railway.app/images/hellojob-landing-2.png
+[hellojob-db-schema]: https://hellojob.up.railway.app/images/db-schema.png
 [Express.js]: https://img.shields.io/badge/Express.js-20232A?style=for-the-badge&logo=express&logoColor=61DAFB
 [Express-url]: https://expressjs.com/
 [Supabase]: https://img.shields.io/badge/Supabase-20232A?style=for-the-badge&logo=supabase&logoColor=61DAFB
