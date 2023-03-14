@@ -45,6 +45,12 @@ Backend for HelloJob App for https://github.com/ARTech-Inc/hellojob-fe
 
 [![Hellojob Screen Shot][product-screenshot]](https://hellojobb.vercel.app/)
 
+
+## Project Link
+* Github Repo : [https://github.com/MaulanaRhezaArdiansyah/kopiku](https://github.com/MaulanaRhezaArdiansyah/kopiku)
+* Frontend Deployment : https://hellojobb.vercel.app
+* Backend Deployment : https://hellojob.up.railway.app/api/v1/
+
 <p align="right">(<a href="#hellojob-top">back to top</a>)</p>
 
 
